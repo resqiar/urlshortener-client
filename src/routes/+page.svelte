@@ -24,6 +24,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Amerta URL Shortener</title>
+</svelte:head>
+
 <main>
 	<!-- HEADER -->
 	<MainHeader {authStatus} />
@@ -40,8 +44,8 @@
 						manage.
 					</p>
 					<div class="flex items-center justify-center gap-4">
-						<button class="btn btn-primary">Get Started</button>
-						<button class="btn btn-ghost">See More</button>
+						<a href="/create" class="btn btn-primary">Get Started</a>
+						<a href="/inventory" class="btn btn-ghost">See More</a>
 					</div>
 				</div>
 			</div>

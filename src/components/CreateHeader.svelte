@@ -1,8 +1,11 @@
 <header>
-	<div class="navbar bg-base-100 px-8 py-4">
+	<div class="navbar bg-base-100 px-8 py-2">
 		<div class="navbar-start">
 			<div class="flex-1">
-				<a href="/" class="normal-case font-bold text-2xl">URL Shortener</a>
+				<a href="/" class="normal-case flex flex-col font-bold text-3xl">
+					Amerta
+					<p class="text-sm pl-[2px]">URL Shortener</p>
+				</a>
 			</div>
 		</div>
 

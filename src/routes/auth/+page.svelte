@@ -72,6 +72,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Login - Amerta URL Shortener</title>
+</svelte:head>
+
 <main class="flex items-center justify-center min-h-screen w-full">
 	{#if status === 'login'}
 		<div class="card shadow-2xl min-w-[400px] bg-base-300 px-4 py-8">

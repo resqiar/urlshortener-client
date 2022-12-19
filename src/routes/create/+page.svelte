@@ -61,6 +61,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Create URL - Amerta URL Shortener</title>
+</svelte:head>
+
 <CreateHeader />
 
 <main class="flex flex-col items-center w-full">

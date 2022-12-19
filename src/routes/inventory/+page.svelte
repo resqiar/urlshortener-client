@@ -38,6 +38,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Inventory - Amerta URL Shortener</title>
+</svelte:head>
+
 <MainHeader authStatus={true} />
 
 <main>
