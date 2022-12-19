@@ -19,7 +19,7 @@
 						<a href="/profile" class="justify-between"> Profile </a>
 					</li>
 					<li>
-						<a href="/Inventory" class="justify-between"> Inventory </a>
+						<a href="/inventory" class="justify-between"> Inventory </a>
 					</li>
 					<li><a href="/auth" on:click={() => localStorage.removeItem('token')}>Logout</a></li>
 				</ul>
