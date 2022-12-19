@@ -7,7 +7,7 @@ export const load = (async ({ fetch, params }) => {
 	// return 404 error if short not provided
 	if (!short) throw error(404);
 
-	const query = await fetch(`http://localhost:3333/v1/url/${short}`);
+	const query = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/url/${short}`);
 	const result = await query.json();
 
 	// return 404 error if short not provided

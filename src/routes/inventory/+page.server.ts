@@ -6,7 +6,7 @@ export const load = (async ({ fetch, cookies }) => {
 
 	if (!token) throw redirect(307, '/auth');
 
-	const res = await fetch('http://localhost:3333/v1/user/profile', {
+	const res = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/user/profile`, {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}

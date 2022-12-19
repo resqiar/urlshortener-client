@@ -9,7 +9,7 @@
 		const token = Cookies.get('token');
 		if (!token) return;
 
-		const req = await fetch('http://localhost:3333/v1/user/profile', {
+		const req = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/user/profile`, {
 			headers: {
 				Authorization: `Bearer ${token}`
 			}

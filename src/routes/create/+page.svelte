@@ -28,7 +28,7 @@
 		error = null;
 		success = null;
 
-		const req = await fetch('http://localhost:3333/v1/url/create', {
+		const req = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/url/create`, {
 			method: 'POST',
 			body: JSON.stringify({
 				originalUrl: originalUrl,
@@ -176,14 +176,16 @@
 				<div class="flex gap-2 mt-8 mx-8">
 					<input
 						type="text"
-						value={`http://localhost:5173/${success.short}`}
+						value={`${import.meta.env.VITE_PUBLIC_CLIENT_ORIGIN}/${success.short}`}
 						disabled
 						class="font-bold input disabled w-full hover:cursor-default"
 					/>
 
 					<button
 						on:click={() =>
-							copyToClipboard(`http://localhost:5173/${success ? success.short : ''}`)}
+							copyToClipboard(
+								`${import.meta.env.VITE_PUBLIC_CLIENT_ORIGIN}/${success ? success.short : ''}`
+							)}
 						title="Copy"
 						class="btn btn-square"
 					>

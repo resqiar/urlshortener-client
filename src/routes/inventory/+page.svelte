@@ -10,7 +10,7 @@
 		const token = Cookies.get('token');
 		if (!token) return (window.location.href = '/auth');
 
-		const request = await fetch('http://localhost:3333/v1/url/inventory', {
+		const request = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/url/inventory`, {
 			headers: {
 				Authorization: `Bearer ${token}`
 			}
@@ -74,7 +74,10 @@
 							<td>{formatTimestamp(item.expire_at)}</td>
 							<td class="flex gap-2">
 								<button
-									on:click={() => copyToClipboard(`http://localhost:5173/${item.short_url}`)}
+									on:click={() =>
+										copyToClipboard(
+											`${import.meta.env.VITE_PUBLIC_CLIENT_ORIGIN}/${item.short_url}`
+										)}
 									title="Copy URL"
 									class="btn btn-sm btn-square"
 								>

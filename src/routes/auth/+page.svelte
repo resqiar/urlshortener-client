@@ -17,7 +17,7 @@
 	async function doLogin() {
 		if (!usernameLogin || !passwordLogin) return;
 
-		const req = await fetch('http://localhost:3333/v1/user/login', {
+		const req = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/user/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -43,7 +43,7 @@
 	async function doRegister() {
 		if (!usernameRegister || !emailRegister || !passwordRegister) return;
 
-		const req = await fetch('http://localhost:3333/v1/user/register', {
+		const req = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/user/register`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
