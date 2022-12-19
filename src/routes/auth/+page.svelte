@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Cookies from 'js-cookie';
 
 	let status: 'login' | 'register' = 'login';
 
@@ -33,7 +34,9 @@
 			return (loginErr = response.message);
 		}
 
-		localStorage.setItem('token', response.token);
+		console.log(response.token);
+
+		issueTokenCookie(response.token);
 		goto('/');
 	}
 
@@ -55,11 +58,17 @@
 		const response = await req.json();
 
 		if (response.error) {
-			return (registerErr = response.message);
+			return (registerErr = response.token);
 		}
 
-		localStorage.setItem('token', response.token);
+		issueTokenCookie(response.token);
 		goto('/');
+	}
+
+	function issueTokenCookie(token: string) {
+		Cookies.set('token', token, {
+			expires: 7
+		});
 	}
 </script>
 

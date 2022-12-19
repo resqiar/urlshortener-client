@@ -12,7 +12,7 @@
 
 		{#if authStatus}
 			<div class="navbar-end flex items-center gap-6">
-				<button class="btn btn-primary btn-sm px-4 gap-2">
+				<a href="/create" class="btn btn-primary btn-sm px-4 gap-2">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -25,7 +25,7 @@
 					</svg>
 
 					Create
-				</button>
+				</a>
 
 				<div class="dropdown dropdown-end">
 					<button class="btn btn-ghost btn-circle avatar">
@@ -39,6 +39,9 @@
 					>
 						<li>
 							<a href="/profile" class="justify-between"> Profile </a>
+						</li>
+						<li>
+							<a href="/inventory" class="justify-between"> Inventory </a>
 						</li>
 						<li><a href="/auth" on:click={() => localStorage.removeItem('token')}>Logout</a></li>
 					</ul>

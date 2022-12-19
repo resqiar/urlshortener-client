@@ -1,11 +1,12 @@
 <script lang="ts">
 	import MainHeader from '../components/MainHeader.svelte';
 	import { onMount } from 'svelte';
+	import Cookies from 'js-cookie';
 
 	let authStatus: boolean = false;
 
 	async function isLogin() {
-		const token = localStorage.getItem('token');
+		const token = Cookies.get('token');
 		if (!token) return;
 
 		const req = await fetch('http://localhost:3333/v1/user/profile', {
@@ -47,4 +48,3 @@
 		</div>
 	</section>
 </main>
-
