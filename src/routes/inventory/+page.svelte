@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Cookies from 'js-cookie';
+	import Toast from '../../components/Toast.svelte';
 	import { onMount } from 'svelte';
 	import MainHeader from '../../components/MainHeader.svelte';
 	import type { Inventory } from '../../types/inventory.interface';
@@ -23,18 +24,58 @@
 		data = result;
 	}
 
+	let URLDeleteID: string | null;
+	let URLDeleteName: string | null;
+
+	async function deleteURL(urlId: string) {
+		const token = Cookies.get('token');
+		if (!token) return (window.location.href = '/auth');
+
+		const request = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/url/delete`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				id: urlId
+			})
+		});
+
+		const result = await request.json();
+		if (result.status === 200) {
+			// exclude the deleted data from the filter.
+			// Of course the data is also deleted in the database.
+			data = data.filter((value) => value.id !== urlId);
+		}
+
+		// Reset delete data
+		URLDeleteID = null;
+		URLDeleteName = null;
+	}
+
 	onMount(() => {
 		getInventory();
 	});
 
 	function copyToClipboard(text: string) {
 		navigator.clipboard.writeText(text);
+		triggerToast();
 	}
 
 	function formatTimestamp(timestamp: string) {
 		// Convert the timestamp to a Date object
 		const expirationDate = new Date(timestamp);
 		return expirationDate.toLocaleString('id');
+	}
+
+	// Trigger toast to show information for 2 seconds
+	let toast: boolean = false;
+	function triggerToast() {
+		toast = true;
+		setTimeout(() => {
+			toast = false;
+		}, 2000); // 2 seconds
 	}
 </script>
 
@@ -101,7 +142,17 @@
 									</svg>
 								</button>
 
-								<button title="Delete" class="btn btn-error btn-sm btn-square">
+								<button
+									on:click={() => {
+										URLDeleteID = item.id;
+										URLDeleteName = `${import.meta.env.VITE_PUBLIC_CLIENT_ORIGIN}/${
+											item.short_url
+										}`;
+									}}
+									for="my-modal-6"
+									title="Delete"
+									class="btn btn-error btn-sm btn-square"
+								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -125,3 +176,41 @@
 		</div>
 	</div>
 </main>
+
+<input type="checkbox" id="my-modal-6" class="modal-toggle" />
+<div class="modal modal-bottom sm:modal-middle {URLDeleteID ? 'modal-open' : ''}">
+	<div class="modal-box">
+		<h3 class="font-bold text-lg">You are about to delete the URL</h3>
+		<p class="py-4">
+			Are you sure you want to delete <strong>{URLDeleteName ?? ''}</strong>? This action cannot be
+			undone.
+		</p>
+		<div class="modal-action">
+			<label
+				on:keydown
+				on:keyup
+				on:keypress
+				on:click={() => {
+					URLDeleteID = null;
+					URLDeleteName = null;
+				}}
+				for="modal"
+				class="btn">Cancel</label
+			>
+			<label
+				on:keydown
+				on:keyup
+				on:keypress
+				on:click={async () => {
+					if (URLDeleteID) await deleteURL(URLDeleteID);
+				}}
+				for="modal"
+				class="btn btn-ghost">Delete</label
+			>
+		</div>
+	</div>
+</div>
+
+{#if toast}
+	<Toast />
+{/if}

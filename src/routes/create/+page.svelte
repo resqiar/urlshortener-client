@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import CreateHeader from '../../components/CreateHeader.svelte';
 	import { nanoid } from 'nanoid';
+	import Toast from '../../components/Toast.svelte';
 
 	let originalUrl: string | null;
 	let customName: string | null;
@@ -14,7 +15,6 @@
 		short: string;
 		original: string;
 	} | null;
-	let successRef: HTMLDivElement;
 
 	function generateRandomName() {
 		const randomUniqueName = nanoid(8); // 8 chars
@@ -51,13 +51,25 @@
 			original: response.original_url
 		};
 
+		// We have to delay the the scrolling,
+		// If not the scroll movement wont work.
 		setTimeout(() => {
 			window.scrollTo(0, document.body.scrollHeight);
-		}, 500);
+		}, 100); // 100ms
 	}
 
 	function copyToClipboard(text: string) {
 		navigator.clipboard.writeText(text);
+		triggerToast();
+	}
+
+	// Trigger toast to show information for 2 seconds
+	let toast: boolean = false;
+	function triggerToast() {
+		toast = true;
+		setTimeout(() => {
+			toast = false;
+		}, 2000); // 2 seconds
 	}
 </script>
 
@@ -163,62 +175,63 @@
 			{/if}
 
 			<div class="card-actions justify-end">
-				<button class="btn btn-ghost">draft</button>
 				<button on:click={create} class="btn btn-primary">shorten</button>
 			</div>
 		</div>
 	</div>
 
-	<div bind:this={successRef}>
-		{#if success}
-			<div id="success" class="card mt-8 w-126 bg-base-300 shadow-xl mb-[300px]">
-				<div class="mx-8 mt-12">
-					<h1 class="font-bold text-3xl">Success shorten your URL! 🎉</h1>
-					<p class="mt-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, iste?</p>
-				</div>
-
-				<div class="flex gap-2 mt-8 mx-8">
-					<input
-						type="text"
-						value={`${import.meta.env.VITE_PUBLIC_CLIENT_ORIGIN}/${success.short}`}
-						disabled
-						class="font-bold input disabled w-full hover:cursor-default"
-					/>
-
-					<button
-						on:click={() =>
-							copyToClipboard(
-								`${import.meta.env.VITE_PUBLIC_CLIENT_ORIGIN}/${success ? success.short : ''}`
-							)}
-						title="Copy"
-						class="btn btn-square"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="w-6 h-6"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"
-							/>
-						</svg>
-					</button>
-				</div>
-
-				<div class="mx-8 mb-12">
-					<p class="mt-4 text-sm">
-						You can also check and track your URLs in your
-						<a class="link" href="/inventory">inventory</a>
-						or go back to
-						<a class="link" href="#create">create</a>
-					</p>
-				</div>
+	{#if success}
+		<div id="success" class="card mt-8 w-126 bg-base-300 shadow-xl mb-[300px]">
+			<div class="mx-8 mt-12">
+				<h1 class="font-bold text-3xl">Success shorten your URL! 🎉</h1>
+				<p class="mt-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, iste?</p>
 			</div>
-		{/if}
-	</div>
+
+			<div class="flex gap-2 mt-8 mx-8">
+				<input
+					type="text"
+					value={`${import.meta.env.VITE_PUBLIC_CLIENT_ORIGIN}/${success.short}`}
+					disabled
+					class="font-bold input disabled w-full hover:cursor-default"
+				/>
+
+				<button
+					on:click={() =>
+						copyToClipboard(
+							`${import.meta.env.VITE_PUBLIC_CLIENT_ORIGIN}/${success ? success.short : ''}`
+						)}
+					title="Copy"
+					class="btn btn-square"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="w-6 h-6"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"
+						/>
+					</svg>
+				</button>
+			</div>
+
+			<div class="mx-8 mb-12">
+				<p class="mt-4 text-sm">
+					You can also check and track your URLs in your
+					<a class="link" href="/inventory">inventory</a>
+					or go back to
+					<a class="link" href="#create">create</a>
+				</p>
+			</div>
+		</div>
+	{/if}
 </main>
+
+{#if toast}
+	<Toast />
+{/if}
