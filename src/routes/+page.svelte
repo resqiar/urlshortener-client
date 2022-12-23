@@ -3,18 +3,23 @@
 	import { onMount } from 'svelte';
 	import Cookies from 'js-cookie';
 
+	// State to define the status of the authentication.
+	// This state will set later when calling the login endpoint.
 	let authStatus: boolean = false;
 
 	async function isLogin() {
 		const token = Cookies.get('token');
 		if (!token) return;
 
+		// Get user profile from the server
+		// Also pass the token to get Authorization.
 		const req = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/user/profile`, {
 			headers: {
 				Authorization: `Bearer ${token}`
 			}
 		});
 
+		// Get JSON response
 		const response = await req.json();
 		if (response.id) return (authStatus = true);
 	}

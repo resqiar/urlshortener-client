@@ -4,6 +4,8 @@
 	import { nanoid } from 'nanoid';
 	import Toast from '../../components/Toast.svelte';
 
+	// States to save the input value
+	// from the create page.
 	let originalUrl: string | null;
 	let customName: string | null;
 	let description: string | null;
@@ -17,17 +19,21 @@
 	} | null;
 
 	function generateRandomName() {
+		// Using nanoid package to generate
+		// a random unique characters.
 		const randomUniqueName = nanoid(8); // 8 chars
+		// Bind the customName value to the new generated one.
 		customName = randomUniqueName;
 	}
 
 	async function create() {
 		if (!originalUrl || !customName) return;
 
-		// reset error and success state
+		// Reset error and success state before proceeding
 		error = null;
 		success = null;
 
+		// Call the server to do create process for a new URL.
 		const req = await fetch(`${import.meta.env.VITE_PUBLIC_SERVER_ORIGIN}/v1/url/create`, {
 			method: 'POST',
 			body: JSON.stringify({
@@ -43,8 +49,13 @@
 			}
 		});
 
+		// Get the JSON value
 		const response = await req.json();
 		if (response.error) return (error = response.message);
+
+		// At this point the create process is success,
+		// so we can set the success state to the returned
+		// value that coming from the database.
 		success = {
 			id: response.id,
 			short: response.short_url,
@@ -81,6 +92,7 @@
 
 <main class="flex flex-col items-center w-full">
 	<div id="create" class="card mt-8 mb-12 w-126 bg-base-300 shadow-xl">
+		<!-- AMBIENT IMAGE -->
 		<figure>
 			<img
 				class="max-h-[100px] w-full object-cover"
@@ -88,11 +100,15 @@
 				alt="Ambient"
 			/>
 		</figure>
+
 		<div class="card-body">
+			<!-- TITLE -->
 			<h2 class="card-title">Create Short URL</h2>
 
+			<!-- DESCRIPTION -->
 			<p>Here you can shorten your URL and customize everything by your need.</p>
 
+			<!-- ORIGINAL URL INPUT -->
 			<div class="form-control w-full">
 				<label for="originalUrl" class="label">
 					<span class="label-text">Original URL*</span>
@@ -105,6 +121,7 @@
 				/>
 			</div>
 
+			<!-- CUSTOM URL INPUT -->
 			<div class="form-control w-full">
 				<label for="customName" class="label">
 					<span class="label-text">Custom URL name*</span>
@@ -142,6 +159,7 @@
 				</label>
 			</div>
 
+			<!-- DESCRIPTION INPUT -->
 			<div class="form-control">
 				<label for="description" class="label">
 					<span class="label-text">Description</span>
@@ -153,6 +171,7 @@
 				/>
 			</div>
 
+			<!-- URL EXPIRATION INPUT -->
 			<div class="form-control w-full">
 				<label for="expiration" class="label">
 					<span class="label-text">Link Expiration</span>

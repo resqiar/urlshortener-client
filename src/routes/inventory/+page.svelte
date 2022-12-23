@@ -112,7 +112,16 @@
 					{#each data as item, index}
 						<tr class="hover">
 							<th>{++index}</th>
-							<td>{item.short_url}</td>
+							<td>
+								<a
+									href={`${import.meta.env.VITE_PUBLIC_CLIENT_ORIGIN}/${item.short_url}`}
+									class="link"
+									target="_blank"
+									rel="noreferrer"
+								>
+									{item.short_url}
+								</a></td
+							>
 							<td class="max-w-[200px] truncate" title={item.original_url}>{item.original_url}</td>
 							<td>{item.description}</td>
 							<td>{item.visits}</td>

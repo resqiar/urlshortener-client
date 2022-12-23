@@ -41,9 +41,6 @@
 						class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-300 rounded-box w-52"
 					>
 						<li>
-							<a href="/profile" class="justify-between"> Profile </a>
-						</li>
-						<li>
 							<a href="/inventory" class="justify-between"> Inventory </a>
 						</li>
 						<li><a href="/auth" on:click={() => localStorage.removeItem('token')}>Logout</a></li>
